@@ -29,14 +29,17 @@ test-suite spec
   hs-source-dirs:      ., test
   main-is:             Spec.hs
   default-extensions:  OverloadedStrings
-  ghc-options:         -Wall
+  ghc-options:         -Wall -threaded
   build-depends:       base ==4.*
                      , bytestring
+                     , http-client
                      , hspec
+                     , HUnit
                      , mtl
                      , scotty
                      , template-haskell
                      , text
+                     , transformers
 
 source-repository head
   type:                git
