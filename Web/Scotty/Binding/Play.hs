@@ -1,5 +1,32 @@
 {-# LANGUAGE TemplateHaskell, QuasiQuotes, FlexibleInstances #-}
 
+-- | The Play Framework style data binding in Scotty.
+--
+-- Data difinition:
+--
+-- > {-# LANGUAGE TemplateHaskell #-}
+-- >
+-- > import Web.Scotty.Binding.Play (deriveBindable)
+-- >
+-- > data Sample = Sample
+-- >     { field1 :: Int
+-- >     , field2 :: Text
+-- >     }
+-- >
+-- > deriveBindable ''Sample
+--
+-- set as GET parameter:
+--
+-- > > curl http://localhost:3000/?data.field1=1&data.field2=whisky
+--
+-- We can get 'Sample' in Scotty:
+--
+-- > main :: IO ()
+-- > main = scotty 3000 $ get "/" $ do
+-- >     a <- parseParam "data"
+-- >     liftIO $ print $ field1 a --> 1
+-- >     liftIO $ print $ field2 a --> "whisky"
+
 module Web.Scotty.Binding.Play
     ( Bindable(..)
     , deriveBindable
@@ -17,10 +44,16 @@ import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 import Web.Scotty (ActionM, Parsable, param)
 
+-- | Class of generic bindable data structure.
 class Bindable a where
-    parseParams :: Text -> ActionM a
+    parseParams
+        :: Text -- ^ prefix
+        -> ActionM a
     parseParams prefix = parseParams' prefix Nothing
-    parseParams' :: Text -> Maybe Text -> ActionM a
+    parseParams'
+        :: Text -- ^ prefix
+        -> Maybe Text -- ^ suffix
+        -> ActionM a
 
 instance Bindable a => Bindable [a] where
     parseParams' prefix _ = parseParamList prefix [0..]
@@ -84,6 +117,7 @@ getParamS pname sname (fname, _, _) = do
             ]))
          |])
 
+-- | by TH
 deriveBindable :: Name -> DecsQ
 deriveBindable dat = do
     (TyConI (DataD _ _ _ [RecC dConst vsTypes] _)) <- reify dat
