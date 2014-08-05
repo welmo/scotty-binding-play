@@ -1,11 +1,11 @@
 name:                scotty-binding-play
-version:             0.1.0
--- synopsis:            
--- description:         
+version:             1.0
+synopsis:            The Play Framework style data binding in Scotty.
+description:         The Play Framework style data binding in Scotty.
 license:             BSD3
 license-file:        LICENSE
-author:              Yusuke Nomura
-maintainer:          yunomu@gmail.com
+author:              Yusuke Nomura <yunomu@gmail.com>
+maintainer:          Yusuke Nomura <yunomu@gmail.com>
 -- copyright:           
 category:            Web
 build-type:          Simple
