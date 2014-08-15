@@ -32,6 +32,7 @@ module Web.Scotty.Binding.Play
     , deriveBindable
     ) where
 
+import Control.Applicative
 import Control.Monad.Error.Class (catchError)
 import Data.ByteString (ByteString)
 import Data.Maybe (catMaybes)
@@ -87,6 +88,10 @@ instance Bindable ST.Text where
 
 instance Bindable Text where
     parseParams' = parse
+
+instance Bindable a => Bindable (Maybe a) where
+    parseParams' pre msuf = (Just <$> parseParams' pre msuf)
+        `catchError` \_ -> return Nothing
 
 parse :: Parsable a => Text -> Maybe Text -> ActionM a
 parse prefix msuffix = param $ mconcat $ catMaybes [Just prefix, msuffix]

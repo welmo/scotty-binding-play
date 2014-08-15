@@ -78,6 +78,14 @@ data Test3 = Test3
 
 deriveBindable ''Test3
 
+data Test4 = Test4
+    { field41 :: Maybe Int
+    , field42 :: Maybe Test1
+    }
+  deriving (Show, Eq)
+
+deriveBindable ''Test4
+
 main :: IO ()
 main = hspec $ do
     describe "Web.Scotty.Binding.Play" $ do
@@ -108,3 +116,18 @@ main = hspec $ do
                 ]
         it "bind nested data GET" $ test GET ex4 ac4
         it "bind nested data POST" $ test POST ex4 ac4
+        let ex5 = Just 1 :: Maybe Int
+        let ac5 = [ ("data", "1") ]
+        it "bind Maybe data GET" $ test GET ex5 ac5
+        it "bind Maybe data POST" $ test POST ex5 ac5
+        let ex6 = Nothing :: Maybe Int
+        let ac6 = []
+        it "bind Maybe data GET" $ test GET ex6 ac6
+        it "bind Maybe data POST" $ test POST ex6 ac6
+        let ex7 = Test4 Nothing (Just ex1)
+        let ac7 =
+                [ ("data.field42.field1", "1")
+                , ("data.field42.field2", "test")
+                ]
+        it "bind Maybe struct data GET" $ test GET ex7 ac7
+        it "bind Maybe struct data POST" $ test POST ex7 ac7
