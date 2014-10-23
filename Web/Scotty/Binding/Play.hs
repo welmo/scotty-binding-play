@@ -89,6 +89,9 @@ instance Bindable ST.Text where
 instance Bindable Text where
     parseParams' = parse
 
+instance Bindable String where
+    parseParams' = parse
+
 instance Bindable a => Bindable (Maybe a) where
     parseParams' pre msuf = (Just <$> parseParams' pre msuf)
         `catchError` \_ -> return Nothing
@@ -100,14 +103,12 @@ parseParamList :: Bindable a => Text -> [Int] -> ActionM [a]
 parseParamList _      []     = fail "not reached"
 parseParamList prefix (n:ns) = do
     a <- parseParams' (prefix <> br) Nothing
-    as <- parseParamList prefix ns `catchError` \_ -> return []
+    as <- parseParamList prefix ns
     return $ a:as
+  `catchError` \_ -> return []
   where
     toText = LTB.toLazyText . LTB.decimal
     br = "[" <> toText n <> "]"
-
-fst3 :: (a, b, c) -> a
-fst3 (a, _, _) = a
 
 -- x <- param $ mconcat $ catMaybes [Just pname, Just ".", Just fname, sname]
 getParamS :: Name -> Name -> VarStrictType -> Q (Name, StmtQ)

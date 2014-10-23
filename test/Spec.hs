@@ -10,7 +10,7 @@ import Data.Text.Lazy (Text)
 import Network.HTTP.Client (Request)
 import qualified Network.HTTP.Client as HTTP
 import Test.Hspec
-import Test.HUnit
+import Test.HUnit hiding (test)
 import Web.Scotty
 
 import Web.Scotty.Binding.Play
@@ -131,3 +131,15 @@ main = hspec $ do
                 ]
         it "bind Maybe struct data GET" $ test GET ex7 ac7
         it "bind Maybe struct data POST" $ test POST ex7 ac7
+        let ex8 = [] :: [Int]
+        let ac8 = []
+        it "bind null array data GET" $ test GET ex8 ac8
+        it "bind null array data POST" $ test POST ex8 ac8
+        let ex9 = [1, 2, 3] :: [Int]
+        let ac9 =
+                [ ("data[0]", "1")
+                , ("data[1]", "2")
+                , ("data[2]", "3")
+                ]
+        it "bind array data GET" $ test GET ex9 ac9
+        it "bind array data POST" $ test POST ex9 ac9
