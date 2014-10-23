@@ -89,9 +89,6 @@ instance Bindable ST.Text where
 instance Bindable Text where
     parseParams' = parse
 
-instance Bindable String where
-    parseParams' = parse
-
 instance Bindable a => Bindable (Maybe a) where
     parseParams' pre msuf = (Just <$> parseParams' pre msuf)
         `catchError` \_ -> return Nothing

@@ -1,5 +1,5 @@
 name:                scotty-binding-play
-version:             1.2
+version:             1.2.1
 synopsis:            The Play Framework style data binding in Scotty.
 description:         The Play Framework style data binding in Scotty.
 license:             BSD3
