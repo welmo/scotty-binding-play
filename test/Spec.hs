@@ -143,3 +143,7 @@ main = hspec $ do
                 ]
         it "bind array data GET" $ test GET ex9 ac9
         it "bind array data POST" $ test POST ex9 ac9
+        let ex10 = "string" :: String
+        let ac10 = [ ("data", "string") ]
+        it "bind string data GET" $ test GET ex10 ac10
+        it "bind string data POST" $ test POST ex10 ac10

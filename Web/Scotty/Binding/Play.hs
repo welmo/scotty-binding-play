@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, QuasiQuotes, FlexibleInstances #-}
+{-# LANGUAGE TemplateHaskell, QuasiQuotes, FlexibleInstances, OverlappingInstances #-}
 
 -- | The Play Framework style data binding in Scotty.
 --
@@ -62,7 +62,9 @@ instance Bindable a => Bindable [a] where
 instance Bindable Bool where
     parseParams' = parse
 
-instance Bindable Char where
+--instance Bindable Char where
+--    parseParams' = parse
+instance Bindable String where
     parseParams' = parse
 
 instance Bindable Double where
